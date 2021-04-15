@@ -1,4 +1,4 @@
-package com.gupao.springbootdemo;
+package com.gupao.signin;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
