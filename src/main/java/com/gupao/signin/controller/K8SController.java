@@ -33,13 +33,13 @@ public class K8SController {
         String time = "08:";
         // 创建任务队列  10为线程数量
         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(10);
-        // 执行任务 1s 后开始执行，每 3s 执行一次
+        // 执行任务 1s 后开始执行，每 10s 执行一次
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
                 if(status[0]){
                     Map html = signIn(getMap());
                     System.out.println(html);
-                    if("签到失败,已打上班卡！".equals(html.get("appmsg").toString())){
+                    if("0".equals(html.get("appcode").toString())){
                         status[0] = false;
                     }
                 }
@@ -50,9 +50,10 @@ public class K8SController {
 
         // 执行任务 1s 后开始执行，每天 执行一次
         Long oneDay = 24 * 60 * 60 * 1000L;
-        final Long[] initDelay = {58652743L};
+        final Long[] initDelay = {646886L};
         scheduledExecutorService.scheduleAtFixedRate(() -> {
-            initDelay[0]  = getTimeMillis(time+(new Random().nextInt(11)+10)+":"+(new Random().nextInt(50)+10)) - System.currentTimeMillis();
+            initDelay[0] = getTimeMillis(time+(new Random().nextInt(11)+10)+":"+(new Random().nextInt(50)+10)) - System.currentTimeMillis();
+            //initDelay[0] = getTimeMillis("09:40:00")- System.currentTimeMillis();
             initDelay[0] = initDelay[0] > 0 ? initDelay[0] : oneDay + initDelay[0];
             SimpleDateFormat df = new SimpleDateFormat("HH:mm");
             Date nowTime = null;
@@ -60,7 +61,7 @@ public class K8SController {
                 System.out.println("重置签到状态"+" "+time+(new Random().nextInt(11)+10)+":"+(new Random().nextInt(50)+10));
                 status[0] = true;
             }
-        }, initDelay[0],oneDay, TimeUnit.SECONDS);
+        }, initDelay[0], oneDay, TimeUnit.MILLISECONDS);
         //}, 1,1, TimeUnit.SECONDS);
 
         return "hello K8s <br/>start signIn";
