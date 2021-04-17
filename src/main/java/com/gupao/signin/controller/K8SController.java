@@ -49,19 +49,22 @@ public class K8SController {
         }, 1, 10, TimeUnit.SECONDS);
 
         // 执行任务 1s 后开始执行，每天 执行一次
-        Long oneDay = 24 * 60 * 60 * 1000L;
-        final Long[] initDelay = {646886L};
+        long oneDay = 24 * 60 * 60 * 1000;
+        long initDelay  = getTimeMillis("08:10:00") - System.currentTimeMillis();
+        initDelay = initDelay > 0 ? initDelay : oneDay + initDelay;
         scheduledExecutorService.scheduleAtFixedRate(() -> {
-            initDelay[0] = getTimeMillis(time+(new Random().nextInt(11)+10)+":"+(new Random().nextInt(50)+10)) - System.currentTimeMillis();
-            //initDelay[0] = getTimeMillis("09:40:00")- System.currentTimeMillis();
-            initDelay[0] = initDelay[0] > 0 ? initDelay[0] : oneDay + initDelay[0];
-            SimpleDateFormat df = new SimpleDateFormat("HH:mm");
-            Date nowTime = null;
-            if(!status[0]){
-                System.out.println("重置签到状态"+" "+time+(new Random().nextInt(11)+10)+":"+(new Random().nextInt(50)+10));
-                status[0] = true;
+            try {
+                Thread.sleep(new Random().nextInt(300000));
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date nowTime = null;
+                if(!status[0]){
+                    System.out.println("重置签到状态"+" "+df.format(new Date()));
+                    status[0] = true;
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        }, initDelay[0], oneDay, TimeUnit.MILLISECONDS);
+        }, initDelay, oneDay, TimeUnit.MILLISECONDS);
         //}, 1,1, TimeUnit.SECONDS);
 
         return "hello K8s <br/>start signIn";
