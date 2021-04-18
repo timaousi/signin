@@ -50,7 +50,7 @@ public class K8SController {
 
         // 执行任务 1s 后开始执行，每天 执行一次
         long oneDay = 24 * 60 * 60 * 1000;
-        long initDelay  = getTimeMillis("08:10:00") - System.currentTimeMillis();
+        long initDelay  = getTimeMillis("08:15:00") - System.currentTimeMillis();
         initDelay = initDelay > 0 ? initDelay : oneDay + initDelay;
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
