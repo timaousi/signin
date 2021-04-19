@@ -37,13 +37,16 @@ public class K8SController {
         scheduledExecutorService.scheduleAtFixedRate(() -> {
             try {
                 if(status[0]){
+                    Thread.sleep(new Random().nextInt(60000));
                     Map html = signIn(getMap());
                     System.out.println(html);
-                    if("0".equals(html.get("appcode").toString())){
+                    if("签到失败,已打上班卡！".equals(html.get("appmsg").toString())||"签到失败,无出勤计划,请点开【我的考勤】进行确认！".equals(html.get("appmsg").toString())){
                         status[0] = false;
                     }
                 }
             } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }, 1, 10, TimeUnit.SECONDS);
